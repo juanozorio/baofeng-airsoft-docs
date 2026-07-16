@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps &amp; Suas Evoluções</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 3rem 2rem;
+      text-align: center;
+      border-bottom: 2px solid #0f3460;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      color: #00d4ff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    header p {
+      margin-top: 0.75rem;
+      font-size: 1.1rem;
+      color: #aaa;
+    }
+
+    .timeline {
+      max-width: 900px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #0f3460;
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: calc(50% + 2rem);
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .timeline-item:nth-child(even) {
+      justify-content: flex-start;
+      padding-right: 0;
+      padding-left: calc(50% + 2rem);
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 1.5rem;
+      width: 14px;
+      height: 14px;
+      background: #00d4ff;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+    }
+
+    .card {
+      background: #1a1a2e;
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 360px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+    }
+
+    .card .year {
+      font-size: 0.85rem;
+      color: #00d4ff;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 0.4rem;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .pillars {
+      background: #1a1a2e;
+      border-top: 2px solid #0f3460;
+      padding: 4rem 1.5rem;
+      text-align: center;
+    }
+
+    .pillars h2 {
+      font-size: 2rem;
+      color: #00d4ff;
+      margin-bottom: 2.5rem;
+    }
+
+    .pillars-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .pillar {
+      background: #0f0f1a;
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      min-width: 200px;
+      flex: 1;
+    }
+
+    .pillar .icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pillar h3 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .pillar p {
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #555;
+      font-size: 0.85rem;
+      border-top: 1px solid #0f3460;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>DevOps &amp; Suas Evoluções</h1>
+    <p>Da entrega manual ao deploy contínuo automatizado</p>
+  </header>
+
+  <section class="timeline">
+
+    <div class="timeline-item">
+      <div class="card">
+        <div class="year">Anos 2000</div>
+        <h2>O Problema</h2>
+        <p>Desenvolvimento e operações trabalhavam em silos. Deploys manuais, lentos e cheios de falhas eram a norma.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="card">
+        <div class="year">2009</div>
+        <h2>Nasce o DevOps</h2>
+        <p>Patrick Debois organiza a primeira DevOpsDays. A cultura de colaboração entre Dev e Ops começa a ganhar forma.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="card">
+        <div class="year">2010 – 2014</div>
+        <h2>CI/CD se consolida</h2>
+        <p>Jenkins, Travis CI e outras ferramentas tornam integração e entrega contínua acessíveis para times de qualquer tamanho.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="card">
+        <div class="year">2013</div>
+        <h2>Containers com Docker</h2>
+        <p>Docker democratiza containers, eliminando o clássico "funciona na minha máquina" e padronizando ambientes.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="card">
+        <div class="year">2014</div>
+        <h2>Orquestração com Kubernetes</h2>
+        <p>Google lança o Kubernetes. Escalar, atualizar e gerenciar containers em produção vira algo declarativo e controlado.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="card">
+        <div class="year">2016 – hoje</div>
+        <h2>GitOps &amp; IaC</h2>
+        <p>Git vira a fonte da verdade para infraestrutura e aplicações. ArgoCD, Flux e Terraform lideram essa evolução.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="pillars">
+    <h2>Pilares do DevOps Moderno</h2>
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="icon">🔁</div>
+        <h3>CI/CD</h3>
+        <p>Automação de build, teste e deploy contínuo.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">📦</div>
+        <h3>Containers</h3>
+        <p>Ambientes portáveis e reproduzíveis com Docker.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">☸️</div>
+        <h3>Kubernetes</h3>
+        <p>Orquestração escalável de workloads em produção.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">🔱</div>
+        <h3>GitOps</h3>
+        <p>Git como fonte única da verdade para infra e apps.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">📊</div>
+        <h3>Observabilidade</h3>
+        <p>Logs, métricas e traces para operar com confiança.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Demo DevOps &mdash; Apresentação 2026</p>
+  </footer>
+
+</body>
+</html>
