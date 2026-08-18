@@ -11,7 +11,7 @@ service:
 
 ingress:
   enabled: true
-  host: demo.ozorio.dev.br
+  host: baofeng-airsoft.ozorio.dev.br
 
 resources:
   requests:

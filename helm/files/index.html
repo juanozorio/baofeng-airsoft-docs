@@ -1,272 +1,1126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevOps &amp; Suas Evoluções</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Manual técnico introdutório de comunicação em airsoft com Baofeng UV-5R e BF-777S. Frequências, canais, CTCSS, DCS e configuração de squad.">
+<title>Field Comms — Manual UV-5R + BF-777S</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0f0f1a;
-      color: #e0e0e0;
-      min-height: 100vh;
-    }
+:root{
+  --paper:#e7e2d4;
+  --paper-hi:#f1ede2;
+  --ink:#17201d;
+  --ink-soft:#39433e;
+  --muted:#69716c;
+  --line:#b9b4a6;
+  --navy:#17323a;
+  --navy-2:#224750;
+  --orange:#d76532;
+  --orange-hi:#ed8150;
+  --cyan:#70b9b0;
+  --cream:#f7f3e9;
+  --white:#fffdf7;
+  --shadow:0 18px 45px rgba(21,28,25,.13);
+  --radius:14px;
+}
 
-    header {
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
-      padding: 3rem 2rem;
-      text-align: center;
-      border-bottom: 2px solid #0f3460;
-    }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 20%,rgba(23,50,58,.05) 0 1px,transparent 1.5px) 0 0/13px 13px,
+    linear-gradient(90deg,rgba(23,50,58,.025) 1px,transparent 1px) 0 0/52px 52px,
+    linear-gradient(rgba(23,50,58,.025) 1px,transparent 1px) 0 0/52px 52px,
+    var(--paper);
+  font:15.5px/1.65 Inter,system-ui,sans-serif;
+}
+a{color:inherit}
+::selection{background:var(--orange);color:#fff}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
 
-    header h1 {
-      font-size: 3rem;
-      color: #00d4ff;
-      letter-spacing: 2px;
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-    }
+.site{
+  display:grid;
+  grid-template-columns:260px minmax(0,1fr);
+  min-height:100vh;
+}
 
-    header p {
-      margin-top: 0.75rem;
-      font-size: 1.1rem;
-      color: #aaa;
-    }
+/* LEFT FIELD INDEX */
+.rail{
+  position:sticky;top:0;height:100vh;
+  padding:25px 20px;
+  background:var(--navy);
+  color:#e9eee9;
+  border-right:5px solid var(--orange);
+  overflow:auto;
+}
+.brand{
+  display:flex;align-items:flex-start;gap:11px;
+  margin-bottom:30px;
+}
+.brand-mark{
+  width:31px;height:31px;flex:0 0 31px;
+  border:2px solid var(--orange);
+  position:relative;
+  transform:rotate(45deg);
+}
+.brand-mark:after{
+  content:"";position:absolute;inset:7px;
+  background:var(--orange);
+}
+.brand strong{
+  display:block;
+  font:700 24px/.9 "Barlow Condensed",Arial Narrow,sans-serif;
+  letter-spacing:.03em;text-transform:uppercase;
+}
+.brand small{
+  display:block;margin-top:5px;
+  color:#aebdb8;
+  font:11px/1.2 "IBM Plex Mono",monospace;
+  letter-spacing:.08em;
+}
+.rail-label{
+  margin:0 0 8px;
+  color:#8fa7a3;
+  font:600 10px/1.2 "IBM Plex Mono",monospace;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+.rail nav a{
+  display:block;
+  padding:8px 9px;
+  border-left:2px solid transparent;
+  color:#c9d3d0;
+  text-decoration:none;
+  font-size:13px;
+}
+.rail nav a:hover,.rail nav a:focus{
+  background:rgba(255,255,255,.06);
+  border-left-color:var(--orange);
+  color:#fff;
+}
+.rail-meta{
+  margin-top:28px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.16);
+}
+.status{
+  display:flex;align-items:center;gap:8px;
+  font:11px "IBM Plex Mono",monospace;color:#b7c5c1;
+}
+.status i{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 12px rgba(112,185,176,.8);
+}
 
-    .timeline {
-      max-width: 900px;
-      margin: 4rem auto;
-      padding: 0 1.5rem;
-      position: relative;
-    }
+/* MAIN */
+main{min-width:0}
+.wrap{width:min(1120px,calc(100% - 56px));margin:auto}
+.hero{
+  min-height:690px;
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(310px,.85fr);
+  align-items:center;
+  gap:55px;
+  padding:70px 0 80px;
+}
+.eyebrow{
+  display:flex;align-items:center;gap:9px;
+  color:var(--orange);
+  font:600 11px "IBM Plex Mono",monospace;
+  letter-spacing:.13em;text-transform:uppercase;
+}
+.eyebrow:before{content:"";width:28px;height:2px;background:var(--orange)}
+h1,h2,h3{font-family:"Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase}
+h1{
+  margin:15px 0 18px;
+  max-width:780px;
+  font-size:clamp(60px,8vw,108px);
+  line-height:.84;
+  letter-spacing:-.045em;
+  font-weight:800;
+}
+h1 em{font-style:normal;color:var(--navy)}
+.lead{max-width:650px;font-size:18px;color:var(--ink-soft)}
+.hero-note{
+  margin-top:25px;
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.tag{
+  display:inline-flex;align-items:center;
+  padding:6px 9px;border:1px solid var(--line);
+  background:rgba(255,253,247,.58);
+  font:500 11px "IBM Plex Mono",monospace;
+  text-transform:uppercase;
+}
 
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: #0f3460;
-      transform: translateX(-50%);
-    }
+/* SIGNATURE RADIO STRIP */
+.radio-plate{
+  position:relative;
+  min-height:390px;
+  padding:25px;
+  background:var(--navy);
+  color:#f5f1e7;
+  border-radius:18px 18px 42px 18px;
+  box-shadow:var(--shadow);
+  transform:rotate(1.2deg);
+  overflow:hidden;
+}
+.radio-plate:before{
+  content:"";
+  position:absolute;inset:18px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:11px 11px 32px 11px;
+}
+.radio-plate:after{
+  content:"";
+  position:absolute;width:180px;height:180px;
+  right:-70px;top:-70px;border-radius:50%;
+  border:1px solid rgba(112,185,176,.28);
+  box-shadow:0 0 0 22px rgba(112,185,176,.04),0 0 0 44px rgba(112,185,176,.025);
+}
+.plate-top,.plate-bottom{position:relative;z-index:1;display:flex;justify-content:space-between;gap:12px}
+.plate-top{font:600 10px "IBM Plex Mono",monospace;color:#91aaa5;letter-spacing:.12em}
+.signal{
+  position:relative;z-index:1;
+  margin:45px 0 30px;
+  padding:20px 18px 16px;
+  background:#0d2229;
+  border:1px solid #35636b;
+  box-shadow:inset 0 0 35px rgba(0,0,0,.24);
+}
+.signal small{display:block;color:#70b9b0;font:500 10px "IBM Plex Mono",monospace;letter-spacing:.1em}
+.signal .freq{
+  margin:5px 0 3px;
+  font:600 clamp(38px,5vw,58px)/1 "IBM Plex Mono",monospace;
+  letter-spacing:-.06em;color:#d7e7d7;
+}
+.signal .code{font:500 14px "IBM Plex Mono",monospace;color:#f0b28d}
+.bars{
+  display:flex;gap:4px;align-items:end;height:40px;margin-top:18px;
+}
+.bars i{display:block;width:7px;background:var(--cyan)}
+.bars i:nth-child(1){height:8px}.bars i:nth-child(2){height:13px}.bars i:nth-child(3){height:19px}
+.bars i:nth-child(4){height:25px}.bars i:nth-child(5){height:31px}.bars i:nth-child(6){height:37px}
+.bars i:nth-child(7){height:29px}.bars i:nth-child(8){height:20px}.bars i:nth-child(9){height:14px}
+.plate-bottom{margin-top:35px;font:500 10px "IBM Plex Mono",monospace;color:#a7b5b1}
 
-    .timeline-item {
-      display: flex;
-      justify-content: flex-end;
-      padding-right: calc(50% + 2rem);
-      margin-bottom: 3rem;
-      position: relative;
-    }
+/* CONTENT */
+.section{
+  padding:86px 0;
+  border-top:1px solid var(--line);
+}
+.section-head{
+  display:grid;grid-template-columns:240px minmax(0,1fr);gap:35px;
+  margin-bottom:28px;
+}
+.section-kicker{
+  padding-top:7px;color:var(--orange);
+  font:600 11px "IBM Plex Mono",monospace;
+  text-transform:uppercase;letter-spacing:.12em;
+}
+.section-kicker:after{
+  content:"";display:block;width:42px;height:1px;background:var(--orange);margin-top:10px;
+}
+h2{
+  margin:0;font-size:clamp(38px,5vw,64px);line-height:.9;letter-spacing:-.035em;
+}
+.section-intro{margin:12px 0 0;color:var(--ink-soft);max-width:700px}
 
-    .timeline-item:nth-child(even) {
-      justify-content: flex-start;
-      padding-right: 0;
-      padding-left: calc(50% + 2rem);
-    }
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{
+  background:rgba(255,253,247,.7);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:21px;
+}
+.card h3{margin:0 0 6px;font-size:24px;line-height:1}
+.card p{margin:0;color:var(--ink-soft)}
+.card .mini{margin-bottom:13px;color:var(--orange);font:600 10px "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase}
 
-    .timeline-item::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 1.5rem;
-      width: 14px;
-      height: 14px;
-      background: #00d4ff;
-      border-radius: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
-    }
+.callout{
+  margin-top:18px;
+  padding:18px 20px;
+  background:var(--navy);
+  color:#edf2ed;
+  border-left:5px solid var(--orange);
+  border-radius:0 10px 10px 0;
+}
+.callout strong{color:#fff}
+.callout.warn{background:#413226;border-left-color:#efb36b}
 
-    .card {
-      background: #1a1a2e;
-      border: 1px solid #0f3460;
-      border-radius: 12px;
-      padding: 1.5rem;
-      max-width: 360px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.code-card{
+  background:var(--cream);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+}
+.code-card header{
+  padding:10px 14px;background:#d9d3c5;border-bottom:1px solid var(--line);
+  font:600 10px "IBM Plex Mono",monospace;letter-spacing:.08em;
+}
+.code-card pre{
+  margin:0;padding:18px;overflow:auto;
+  font:500 13px/1.7 "IBM Plex Mono",monospace;
+  color:var(--navy);background:transparent;
+}
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
-    }
+/* CHANNEL TABLE */
+.table-shell{
+  background:var(--cream);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:auto;
+}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #c9c4b7}
+th{
+  color:#fff;background:var(--navy);
+  font:600 10px "IBM Plex Mono",monospace;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+td{font-size:13px}
+td.mono{font-family:"IBM Plex Mono",monospace;color:var(--navy)}
+tr:last-child td{border-bottom:0}
+tr.highlight td{background:rgba(215,101,50,.10)}
+.channel-id{
+  display:inline-grid;place-items:center;
+  width:30px;height:24px;border-radius:5px;
+  background:var(--navy);color:#fff;
+  font:600 11px "IBM Plex Mono",monospace;
+}
 
-    .card .year {
-      font-size: 0.85rem;
-      color: #00d4ff;
-      font-weight: 600;
-      letter-spacing: 1px;
-      margin-bottom: 0.4rem;
-    }
+/* PROCESS */
+.process{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.process article{padding:20px 16px;background:rgba(255,253,247,.68);border-right:1px solid var(--line)}
+.process article:last-child{border-right:0}
+.process .number{font:600 10px "IBM Plex Mono",monospace;color:var(--orange)}
+.process h3{font-size:22px;margin:10px 0 7px}
+.process p{margin:0;font-size:13px;color:var(--ink-soft)}
 
-    .card h2 {
-      font-size: 1.2rem;
-      color: #fff;
-      margin-bottom: 0.5rem;
-    }
+/* COMPATIBILITY */
+.compat{
+  display:grid;grid-template-columns:1fr 90px 1fr;align-items:stretch;gap:0;
+  margin:22px 0;
+}
+.device{
+  padding:24px;background:var(--cream);border:1px solid var(--line);
+}
+.device:first-child{border-radius:13px 0 0 13px}
+.device:last-child{border-radius:0 13px 13px 0}
+.device small{font:600 10px "IBM Plex Mono",monospace;color:var(--orange);letter-spacing:.1em}
+.device h3{font-size:31px;margin:8px 0}
+.device code{font:600 16px "IBM Plex Mono",monospace;color:var(--navy)}
+.link{
+  display:grid;place-items:center;background:var(--navy);color:#fff;
+  font:600 22px "IBM Plex Mono",monospace;
+}
 
-    .card p {
-      font-size: 0.95rem;
-      color: #aaa;
-      line-height: 1.6;
-    }
+/* SEARCH */
+.search-wrap{display:flex;gap:10px;margin-bottom:12px}
+.search{
+  width:100%;padding:12px 13px;
+  border:1px solid var(--line);border-radius:9px;
+  background:var(--cream);color:var(--ink);font:14px Inter,sans-serif;
+}
+.search-label{
+  display:flex;align-items:center;padding:0 12px;
+  background:var(--navy);color:#fff;border-radius:9px;
+  font:600 10px "IBM Plex Mono",monospace;text-transform:uppercase;
+}
+.hide{display:none!important}
 
-    .pillars {
-      background: #1a1a2e;
-      border-top: 2px solid #0f3460;
-      padding: 4rem 1.5rem;
-      text-align: center;
-    }
+/* FOOTER */
+footer{
+  padding:55px 0 70px;background:var(--navy);color:#dbe2df;
+}
+.footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+footer h2{color:#fff;font-size:45px}
+footer p{color:#aebdb8;max-width:650px}
+.footer-note{
+  padding-top:18px;border-top:1px solid rgba(255,255,255,.15);
+  color:#8fa09a;font:11px/1.6 "IBM Plex Mono",monospace;
+}
 
-    .pillars h2 {
-      font-size: 2rem;
-      color: #00d4ff;
-      margin-bottom: 2.5rem;
-    }
-
-    .pillars-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .pillar {
-      background: #0f0f1a;
-      border: 1px solid #0f3460;
-      border-radius: 12px;
-      padding: 1.5rem 2rem;
-      min-width: 200px;
-      flex: 1;
-    }
-
-    .pillar .icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .pillar h3 {
-      font-size: 1.1rem;
-      color: #fff;
-      margin-bottom: 0.4rem;
-    }
-
-    .pillar p {
-      font-size: 0.9rem;
-      color: #888;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #555;
-      font-size: 0.85rem;
-      border-top: 1px solid #0f3460;
-    }
-  </style>
+@media(max-width:1200px){
+  .wrap{width:min(95%,1120px)}
+  .section{padding:70px 0}
+  .hero{gap:40px;padding:50px 0}
+  .radio-plate{min-height:350px;padding:20px}
+  h1{font-size:clamp(48px,7vw,90px)}
+  h2{font-size:clamp(32px,5vw,56px)}
+}
+@media(max-width:1000px){
+  .site{grid-template-columns:1fr}
+  .rail{position:relative;height:auto;border-right:0;border-bottom:5px solid var(--orange);padding:16px 4%;overflow:visible}
+  .brand{margin-bottom:12px}
+  .brand strong{font-size:20px}
+  .brand small{font-size:10px}
+  .rail nav{display:flex;overflow:auto;gap:3px;padding-bottom:8px}
+  .rail nav a{white-space:nowrap;border-left:0;border-bottom:2px solid transparent;font-size:12px;padding:6px 8px}
+  .rail nav a:hover{border-left:0;border-bottom-color:var(--orange)}
+  .rail-meta{display:none}
+  .wrap{width:min(95%,1000px)}
+  .hero{min-height:auto;padding:50px 0 60px;grid-template-columns:1fr;gap:35px}
+  .radio-plate{max-width:100%;min-height:320px}
+  .hero-note{gap:6px}
+  .tag{font-size:10px;padding:5px 8px}
+  .section-head{grid-template-columns:1fr;gap:16px}
+  .section-kicker{font-size:10px}
+  .cards{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+  .card h3{font-size:20px}
+  .card p{font-size:13px}
+  .two{gap:12px}
+  .code-card pre{font-size:12px;padding:14px}
+  .process{grid-template-columns:1fr 1fr;gap:0;border-radius:10px}
+  .process article:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}
+  .process article{padding:16px 12px;font-size:12px;border-bottom:1px solid var(--line)}
+  .process h3{font-size:18px;margin:8px 0 5px}
+  .process p{font-size:12px}
+  .compat{grid-template-columns:1fr 70px 1fr}
+  .device{padding:18px}
+  .device h3{font-size:24px}
+  .device code{font-size:14px}
+  .link{font-size:18px}
+  .table-shell{border-radius:10px}
+  table{min-width:600px;font-size:12px}
+  th,td{padding:10px 12px}
+  .channel-id{width:28px;height:22px;font-size:10px}
+}
+@media(max-width:850px){
+  .wrap{width:min(94%,820px)}
+  .section{padding:58px 0}
+  .hero{padding:42px 0 52px;gap:32px}
+  .radio-plate{min-height:320px}
+  .process{grid-template-columns:1fr}
+  .process article{border-right:0;border-bottom:1px solid var(--line)}
+  .process article:last-child{border-bottom:0}
+  h2{font-size:clamp(28px,4.5vw,50px)}
+  .section-head{margin-bottom:20px}
+}
+@media(max-width:768px){
+  .wrap{width:min(93%,720px)}
+  .rail{padding:13px 3.5%}
+  .rail nav{gap:2px}
+  .rail nav a{font-size:12px;padding:6px 8px}
+  .hero{padding:38px 0 48px;gap:28px}
+  .radio-plate{min-height:310px;padding:19px}
+  .signal .freq{font-size:clamp(34px,5.5vw,52px)}
+  .signal .code{font-size:13px}
+  h1{font-size:clamp(46px,6.5vw,82px);line-height:.85}
+  h2{font-size:clamp(26px,4.5vw,50px)}
+  .lead{font-size:16px}
+  .card h3{font-size:18px}
+  .card p{font-size:12px}
+  .code-card pre{font-size:11px;padding:12px}
+  .code-card header{font-size:9px;padding:8px 12px}
+  .two{grid-template-columns:1fr;gap:12px}
+  .cards{grid-template-columns:1fr;gap:11px}
+  table{min-width:520px;font-size:12px}
+  th,td{padding:10px 12px;font-size:11px}
+  .channel-id{width:26px;height:20px;font-size:9px}
+  .compat{grid-template-columns:1fr 60px 1fr;gap:0;margin:16px 0}
+  .device{padding:16px;border-radius:8px}
+  .device:first-child{border-radius:8px 0 0 8px}
+  .device:last-child{border-radius:0 8px 8px 0}
+  .device h3{font-size:20px;margin:6px 0}
+  .device code{font-size:12px}
+  .link{font-size:16px;min-height:44px}
+  .callout{margin-top:16px;padding:14px 16px;font-size:13px}
+  .callout strong{display:block;margin-bottom:8px}
+}
+@media(max-width:600px){
+  .wrap{width:min(92%,580px)}
+  .rail{padding:10px 2%}
+  .rail nav{gap:2px;padding-bottom:6px}
+  .rail nav a{font-size:11px;padding:5px 7px}
+  .brand{margin-bottom:8px}
+  .brand strong{font-size:18px}
+  .section{padding:45px 0}
+  .section-head{grid-template-columns:1fr;gap:14px;margin-bottom:16px}
+  .hero{padding:30px 0 38px;gap:20px}
+  .radio-plate{min-height:280px;padding:16px;border-radius:14px 14px 32px 14px}
+  h1{font-size:clamp(36px,6vw,60px)}
+  h2{font-size:clamp(24px,4.5vw,42px)}
+  .cards{gap:10px;grid-template-columns:1fr}
+  .card{padding:14px}
+  .card h3{font-size:16px;margin:0 0 4px}
+  .card p{font-size:11px}
+  .code-card pre{font-size:10px;padding:10px}
+  .code-card header{font-size:8px;padding:7px 10px}
+  .two{gap:10px;grid-template-columns:1fr}
+  table{min-width:100%;font-size:11px}
+  th,td{padding:8px 10px}
+  .channel-id{width:24px;height:18px;font-size:8px}
+  .process{grid-template-columns:1fr;border-radius:8px}
+  .process article{padding:13px 10px;border-right:0;border-bottom:1px solid var(--line)}
+  .process article:last-child{border-bottom:0}
+  .process h3{font-size:16px;margin:6px 0 4px}
+  .process p{font-size:11px}
+  .compat{grid-template-columns:1fr;gap:0;margin:12px 0}
+  .device{padding:14px;border-radius:8px;margin-bottom:10px}
+  .device:first-child{border-radius:8px}
+  .device:last-child{border-radius:8px;margin-bottom:0}
+  .device h3{font-size:18px;margin:5px 0}
+  .device code{font-size:11px}
+  .link{display:none}
+  .callout{margin-top:13px;padding:12px 14px;font-size:12px}
+  footer h2{font-size:28px}
+  footer p{font-size:13px}
+  .footer-grid{grid-template-columns:1fr;gap:14px}
+  .footer-note{font-size:10px}
+}
+@media(max-width:480px){
+  html{font-size:13px}
+  body{font-size:14px}
+  .wrap{width:min(100% - 20px,480px)}
+  .site{grid-template-columns:1fr;gap:0}
+  .rail{position:fixed;top:0;left:0;right:0;height:auto;width:100%;border-right:0;border-bottom:4px solid var(--orange);padding:8px 12px;overflow-x:auto;overflow-y:hidden;z-index:999;max-height:100px}
+  .rail::-webkit-scrollbar{display:none}
+  .brand{display:none}
+  .rail-label{display:none}
+  .rail-meta{display:none}
+  .rail nav{display:flex;gap:1px;overflow-x:auto;padding:4px 0;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .rail nav a{font-size:11px;padding:5px 8px;white-space:nowrap;flex-shrink:0;border-bottom:2px solid transparent;color:#c9d3d0;text-decoration:none}
+  .rail nav a:hover,.rail nav a:focus{border-bottom-color:var(--orange);color:#fff}
+  main{margin-top:70px;padding-top:0}
+  .section{padding:35px 10px}
+  .section-kicker{font-size:9px}
+  .section-kicker:after{width:24px}
+  .section-head{grid-template-columns:1fr;gap:12px;margin-bottom:14px}
+  .hero{padding:20px 10px 28px;gap:14px;min-height:auto;grid-template-columns:1fr}
+  .hero .wrap{width:100%}
+  .radio-plate{min-height:240px;padding:12px;margin-top:12px;border-radius:12px 12px 28px 12px;transform:none}
+  .radio-plate:before{border-radius:8px 8px 24px 8px;inset:12px}
+  .plate-top{font-size:8px}
+  .plate-bottom{font-size:8px;margin-top:20px}
+  .signal{margin:35px 0 25px;padding:16px 14px 12px}
+  .signal small{font-size:9px}
+  .signal .freq{font-size:clamp(28px,7vw,42px);margin:4px 0 2px}
+  .signal .code{font-size:11px}
+  .bars{height:32px;margin-top:14px}
+  .bars i{width:6px}
+  h1{font-size:clamp(28px,6vw,48px);margin:12px 0 14px;line-height:.9}
+  .lead{font-size:14px}
+  .eyebrow{font-size:9px;gap:6px}
+  .eyebrow:before{width:14px;height:1px}
+  h2{font-size:clamp(22px,4vw,36px)}
+  h3{font-size:15px}
+  .hero-note{margin-top:12px;gap:4px}
+  .tag{font-size:8px;padding:3px 5px}
+  .cards{gap:8px;margin-top:10px;grid-template-columns:1fr}
+  .card{padding:12px;border-radius:10px}
+  .card h3{font-size:14px;margin:0 0 4px}
+  .card p{font-size:11px}
+  .card .mini{font-size:7px;margin-bottom:8px}
+  .two{gap:10px;grid-template-columns:1fr}
+  .code-card{border-radius:6px}
+  .code-card header{font-size:8px;padding:6px 8px}
+  .code-card pre{font-size:10px;padding:10px;line-height:1.6}
+  table{font-size:10px;min-width:100%}
+  .table-shell{border-radius:6px}
+  th,td{padding:7px 8px;border-bottom:1px solid #d4cfc2}
+  .channel-id{width:24px;height:18px;font-size:8px}
+  .process{border-radius:6px;grid-template-columns:1fr;gap:0;border-width:1px}
+  .process article{padding:12px 10px;border-right:0;border-bottom:1px solid var(--line)}
+  .process article:last-child{border-bottom:0}
+  .process .number{font-size:9px}
+  .process h3{font-size:15px;margin:5px 0 3px}
+  .process p{font-size:11px}
+  .compat{grid-template-columns:1fr;gap:0;margin:10px 0}
+  .device{padding:12px;border-radius:6px;margin-bottom:8px;border:1px solid var(--line);background:var(--cream)}
+  .device:first-child{border-radius:6px}
+  .device:last-child{border-radius:6px;margin-bottom:0}
+  .device small{font-size:8px}
+  .device h3{font-size:16px;margin:4px 0}
+  .device code{font-size:11px}
+  .link{display:none}
+  .callout{margin-top:12px;padding:10px 12px;font-size:11px;border-radius:0 6px 6px 0;border-left-width:4px}
+  .callout strong{display:block;margin-bottom:6px}
+  .callout.warn{background:#3d2f20;border-left-color:#e8a357}
+  footer{padding:30px 10px 40px;background:var(--navy)}
+  footer .wrap{width:100%}
+  footer h2{font-size:22px;color:#fff;margin:0 0 12px}
+  footer p{font-size:12px;color:#aebdb8;max-width:100%;margin:0}
+  .footer-grid{grid-template-columns:1fr;gap:10px}
+  .footer-note{font-size:9px;color:#8fa09a;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);margin-top:10px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{
+  .rail{display:none}.site{display:block}
+  body{background:#fff}.section{break-inside:avoid}
+}
+</style>
 </head>
-<body>
 
-  <header>
-    <h1>DevOps &amp; Suas Evoluções</h1>
-    <p>Da entrega manual ao deploy contínuo automatizado</p>
-    <p>Teste Maneiro @Bruno</p>
+<body>
+<div class="site">
+
+<aside class="rail">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true"></div>
+    <div>
+      <strong>Field Comms</strong>
+      <small>MANUAL / RF-01</small>
+    </div>
+  </div>
+
+  <p class="rail-label">Índice de campo</p>
+  <nav aria-label="Navegação do manual">
+    <a href="#fundamentos">01 · Fundamentos</a>
+    <a href="#ctcss-dcs">02 · Códigos</a>
+    <a href="#bf777s">03 · BF-777S</a>
+    <a href="#uv5r">04 · UV-5R</a>
+    <a href="#compatibilidade">05 · Compatibilidade</a>
+    <a href="#squad">06 · Canal do squad</a>
+    <a href="#privacidade">07 · Alcance e privacidade</a>
+    <a href="#procedimento">08 · Procedimento</a>
+    <a href="#freq-sem-codigo">09 · Sem código</a>
+    <a href="#escolher-codigo">10 · Qual código</a>
+    <a href="#glossario">11 · Glossário</a>
+  </nav>
+
+  <div class="rail-meta">
+    <div class="status"><i></i> DOCUMENTAÇÃO OPERACIONAL</div>
+    <p class="small" style="color:#92a19c;margin-top:12px">UV-5R + BF-777S<br>FM analógico · UHF</p>
+  </div>
+</aside>
+
+<main>
+  <header class="hero">
+    <div class="wrap" style="display:contents">
+      <div>
+        <div class="wrap">
+          <div class="eyebrow">Manual técnico para airsoft</div>
+          <h1>Frequência.<br><em>Código.</em><br>Contato.</h1>
+          <p class="lead">Referência prática para configurar e operar <strong>Baofeng UV-5R</strong> e <strong>BF-777S</strong> em comunicação de equipe.</p>
+          <div class="hero-note">
+            <span class="tag">UHF</span>
+            <span class="tag">FM analógico</span>
+            <span class="tag">Simplex</span>
+            <span class="tag">CTCSS / DCS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="radio-plate" aria-label="Exemplo visual de um canal">
+        <div class="plate-top"><span>FIELD CHANNEL</span><span>RF / 01</span></div>
+        <div class="signal">
+          <small>EXEMPLO DE CONFIGURAÇÃO</small>
+          <div class="freq">463.525</div>
+          <div class="code">DCS · D331N</div>
+          <div class="bars" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="plate-bottom"><span>RX = TX</span><span>ANALOG / FM</span></div>
+      </div>
+    </div>
   </header>
 
-  <section class="timeline">
+  <section class="section" id="fundamentos">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">01 / fundamentos</div>
+        <div>
+          <h2>O rádio precisa concordar em quatro coisas.</h2>
+          <p class="section-intro">Para uma comunicação simples entre rádios, a configuração deve ser compatível. Comece pelo essencial e deixe os menus avançados para depois.</p>
+        </div>
+      </div>
 
-    <div class="timeline-item">
-      <div class="card">
-        <div class="year">Anos 2000</div>
-        <h2>O Problema</h2>
-        <p>Desenvolvimento e operações trabalhavam em silos. Deploys manuais, lentos e cheios de falhas eram a norma.</p>
+      <div class="cards">
+        <article class="card">
+          <div class="mini">Onde falar</div>
+          <h3>Frequência</h3>
+          <p>É o número do canal de rádio, por exemplo <code>463.525 MHz</code>. Dois rádios precisam estar na mesma frequência para comunicação simplex.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Como falar</div>
+          <h3>PTT</h3>
+          <p><strong>Push To Talk.</strong> Pressione para transmitir e solte para voltar a receber. Evite falar antes de pressionar o PTT.</p>
+        </article>
+        <article class="card">
+          <div class="mini">O que abre o áudio</div>
+          <h3>CTCSS / DCS</h3>
+          <p>São códigos de squelch. Quando usados, o receptor pode exigir o código correto antes de abrir o áudio.</p>
+        </article>
       </div>
-    </div>
 
-    <div class="timeline-item">
-      <div class="card">
-        <div class="year">2009</div>
-        <h2>Nasce o DevOps</h2>
-        <p>Patrick Debois organiza a primeira DevOpsDays. A cultura de colaboração entre Dev e Ops começa a ganhar forma.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="card">
-        <div class="year">2010 – 2014</div>
-        <h2>CI/CD se consolida</h2>
-        <p>Jenkins, Travis CI e outras ferramentas tornam integração e entrega contínua acessíveis para times de qualquer tamanho.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="card">
-        <div class="year">2013</div>
-        <h2>Containers com Docker</h2>
-        <p>Docker democratiza containers, eliminando o clássico "funciona na minha máquina" e padronizando ambientes.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="card">
-        <div class="year">2014</div>
-        <h2>Orquestração com Kubernetes</h2>
-        <p>Google lança o Kubernetes. Escalar, atualizar e gerenciar containers em produção vira algo declarativo e controlado.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="card">
-        <div class="year">2016 – hoje</div>
-        <h2>GitOps &amp; IaC</h2>
-        <p>Git vira a fonte da verdade para infraestrutura e aplicações. ArgoCD, Flux e Terraform lideram essa evolução.</p>
-      </div>
-    </div>
-
-  </section>
-
-  <section class="pillars">
-    <h2>Pilares do DevOps Moderno</h2>
-    <div class="pillars-grid">
-      <div class="pillar">
-        <div class="icon">🔁</div>
-        <h3>CI/CD</h3>
-        <p>Automação de build, teste e deploy contínuo.</p>
-      </div>
-      <div class="pillar">
-        <div class="icon">📦</div>
-        <h3>Containers</h3>
-        <p>Ambientes portáveis e reproduzíveis com Docker.</p>
-      </div>
-      <div class="pillar">
-        <div class="icon">☸️</div>
-        <h3>Kubernetes</h3>
-        <p>Orquestração escalável de workloads em produção.</p>
-      </div>
-      <div class="pillar">
-        <div class="icon">🔱</div>
-        <h3>GitOps</h3>
-        <p>Git como fonte única da verdade para infra e apps.</p>
-      </div>
-      <div class="pillar">
-        <div class="icon">📊</div>
-        <h3>Observabilidade</h3>
-        <p>Logs, métricas e traces para operar com confiança.</p>
+      <div class="two" style="margin-top:16px">
+        <article class="card">
+          <div class="mini">Modelo de operação</div>
+          <h3>Simplex</h3>
+          <p>Os rádios se comunicam diretamente. Em uma configuração simplex, RX e TX usam normalmente a mesma frequência. É o modelo mais simples para jogos.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Controle de ruído</div>
+          <h3>Squelch</h3>
+          <p>Define quanto sinal é necessário para abrir o áudio. Squelch não é volume e não melhora o alcance.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <footer>
-    <p>Demo DevOps &mdash; Apresentação 2026</p>
-  </footer>
+  <section class="section" id="ctcss-dcs">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">02 / códigos</div>
+        <div>
+          <h2>CTCSS e DCS não mudam a frequência.</h2>
+          <p class="section-intro">Eles funcionam como uma segunda condição para o squelch. O rádio continua transmitindo na frequência configurada.</p>
+        </div>
+      </div>
 
+      <div class="two">
+        <article class="card">
+          <div class="mini">Subtom analógico</div>
+          <h3>CTCSS</h3>
+          <p>Usa um tom baixo, como <code>69.3 Hz</code>. Um rádio pode transmitir esse tom e o outro pode exigir o mesmo tom para abrir o áudio.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Código digital de squelch</div>
+          <h3>DCS</h3>
+          <p>Usa uma sequência/código, como <code>D331N</code>. A letra <strong>N</strong> indica a forma normal do código em muitos equipamentos.</p>
+        </article>
+      </div>
+
+      <div class="callout">
+        <strong>Regra prática:</strong> se um canal do BF-777S possui CTCSS ou DCS, o UV-5R precisa receber a mesma informação para reproduzir a comunicação de forma compatível. Para DCS, use o mesmo código em transmissão e recepção quando a configuração do canal for simétrica.
+      </div>
+
+      <div class="callout warn">
+        <strong>DCS/CTCSS não são criptografia.</strong> Eles não escondem a conversa. Um terceiro pode monitorar a frequência de outras formas e, se descobrir a configuração, pode reproduzir o mesmo código.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="bf777s">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">03 / BF-777S</div>
+        <div>
+          <h2>Os 16 canais de referência.</h2>
+          <p class="section-intro">A tabela abaixo reproduz a lista fornecida para o BF-777S. Ela permite transformar um número de canal em uma configuração que pode ser digitada no UV-5R.</p>
+        </div>
+      </div>
+
+      <div class="table-shell">
+        <table>
+          <thead><tr><th>Canal</th><th>Frequência</th><th>CTCSS TX/RX</th><th>DCS TX/RX</th></tr></thead>
+          <tbody>
+            <tr><td><span class="channel-id">01</span></td><td class="mono">462.125</td><td>69.3 Hz</td><td>—</td></tr>
+            <tr><td><span class="channel-id">02</span></td><td class="mono">462.225</td><td>OFF</td><td>OFF</td></tr>
+            <tr><td><span class="channel-id">03</span></td><td class="mono">462.325</td><td>OFF</td><td>OFF</td></tr>
+            <tr><td><span class="channel-id">04</span></td><td class="mono">462.425</td><td>103.5 Hz</td><td>—</td></tr>
+            <tr><td><span class="channel-id">05</span></td><td class="mono">462.525</td><td>114.8 Hz</td><td>—</td></tr>
+            <tr><td><span class="channel-id">06</span></td><td class="mono">462.625</td><td>127.3 Hz</td><td>—</td></tr>
+            <tr><td><span class="channel-id">07</span></td><td class="mono">462.725</td><td>136.5 Hz</td><td>—</td></tr>
+            <tr><td><span class="channel-id">08</span></td><td class="mono">462.825</td><td>162.2 Hz</td><td>—</td></tr>
+            <tr><td><span class="channel-id">09</span></td><td class="mono">462.925</td><td>—</td><td>D025N</td></tr>
+            <tr><td><span class="channel-id">10</span></td><td class="mono">463.025</td><td>—</td><td>D032N</td></tr>
+            <tr><td><span class="channel-id">11</span></td><td class="mono">463.125</td><td>—</td><td>D125N</td></tr>
+            <tr><td><span class="channel-id">12</span></td><td class="mono">463.225</td><td>—</td><td>D155N</td></tr>
+            <tr class="highlight"><td><span class="channel-id">13</span></td><td class="mono"><strong>463.525</strong></td><td>—</td><td><strong>D331N</strong></td></tr>
+            <tr><td><span class="channel-id">14</span></td><td class="mono">450.225</td><td>—</td><td>D023N</td></tr>
+            <tr><td><span class="channel-id">15</span></td><td class="mono">460.325</td><td>OFF</td><td>OFF</td></tr>
+            <tr><td><span class="channel-id">16</span></td><td class="mono">469.945</td><td>203.5 Hz</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <strong>Nota de conferência:</strong> a transcrição do vídeo parece indicar <code>462.385</code> no canal 3, enquanto a tabela fornecida indica <code>462.325</code>. A documentação usa <code>462.325</code>, mas a programação deve sempre ser conferida no rádio físico.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="uv5r">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">04 / UV-5R</div>
+        <div>
+          <h2>O UV-5R transforma o canal em números.</h2>
+          <p class="section-intro">Em vez de depender apenas de posições fixas, o aparelho permite digitar a frequência e configurar os filtros de recepção e transmissão.</p>
+        </div>
+      </div>
+
+      <div class="two">
+        <div class="code-card">
+          <header>EXEMPLO · CANAL SEM SUBTOM</header>
+          <pre>FREQUÊNCIA     462.225
+CTCSS TX       OFF
+CTCSS RX       OFF
+DCS TX         OFF
+DCS RX         OFF
+
+MODE           FM / WIDE
+OFFSET         000.000
+SHIFT          OFF</pre>
+        </div>
+        <div class="code-card">
+          <header>EXEMPLO · CANAL COM DCS</header>
+          <pre>FREQUÊNCIA     463.525
+CTCSS TX       OFF
+CTCSS RX       OFF
+DCS TX         D331N
+DCS RX         D331N
+
+MODE           FM / WIDE
+OFFSET         000.000
+SHIFT          OFF</pre>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>A e B no visor:</strong> o UV-5R possui duas linhas/canaletas de operação. Com Dual Watch (TDR), o aparelho pode monitorar ambas. Isso não significa que a linha A seja sempre TX e a B sempre RX.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="compatibilidade">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">05 / compatibilidade</div>
+        <div>
+          <h2>Dois modelos, uma conversa.</h2>
+          <p class="section-intro">O fato de os aparelhos terem formatos e controles diferentes não impede a comunicação. O que precisa coincidir é a configuração de rádio.</p>
+        </div>
+      </div>
+
+      <div class="compat">
+        <article class="device">
+          <small>RÁDIO A</small>
+          <h3>BF-777S</h3>
+          <code>CH 02 → 462.225</code>
+          <p>Sem subtom informado na tabela de referência.</p>
+        </article>
+        <div class="link">↔</div>
+        <article class="device">
+          <small>RÁDIO B</small>
+          <h3>UV-5R</h3>
+          <code>462.225</code>
+          <p>CTCSS e DCS desligados.</p>
+        </article>
+      </div>
+
+      <h3 style="font-size:31px;margin-top:36px">Quando existe CTCSS ou DCS</h3>
+      <div class="compat">
+        <article class="device">
+          <small>BF-777S</small>
+          <h3>CH 13</h3>
+          <code>463.525 · D331N</code>
+          <p>O canal já contém a combinação de frequência e DCS.</p>
+        </article>
+        <div class="link">↔</div>
+        <article class="device">
+          <small>UV-5R</small>
+          <h3>Canal salvo</h3>
+          <code>463.525 · D331N</code>
+          <p>Configure a mesma frequência e o mesmo DCS em TX/RX.</p>
+        </article>
+      </div>
+
+      <div class="callout">
+        <strong>Importante:</strong> esses exemplos são comunicação FM analógica. Ter teclado, memória e visor não significa que o UV-5R esteja operando como rádio digital/DMR.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="squad">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">06 / squad</div>
+        <div>
+          <h2>Um canal compartilhado pelo grupo.</h2>
+          <p class="section-intro">Quando todos os integrantes usam UV-5R, é possível criar uma configuração comum e salvá-la como um canal. A frequência deve ser uma frequência autorizada para o equipamento e para o evento.</p>
+        </div>
+      </div>
+
+      <div class="process">
+        <article><div class="number">ESCOLHA</div><h3>01</h3><p>Defina uma frequência permitida e não ocupada, conforme as regras do evento.</p></article>
+        <article><div class="number">FILTRO</div><h3>02</h3><p>Escolha CTCSS ou DCS para o grupo e registre o valor.</p></article>
+        <article><div class="number">IGUALE</div><h3>03</h3><p>Use exatamente a mesma frequência e código em todos os UV-5R.</p></article>
+        <article><div class="number">SALVE</div><h3>04</h3><p>Grave a combinação como um canal de memória para evitar redigitação.</p></article>
+        <article><div class="number">TESTE</div><h3>05</h3><p>Teste transmissão e recepção de todos os rádios antes do jogo.</p></article>
+      </div>
+
+      <div class="two" style="margin-top:18px">
+        <div class="code-card">
+          <header>MODELO DE CANAL · SQUAD</header>
+          <pre>NOME           SQUAD
+FREQUÊNCIA     [AUTORIZADA]
+TX-CTCSS       OFF
+RX-CTCSS       OFF
+TX-DCS         [CÓDIGO]
+RX-DCS         [CÓDIGO]
+OFFSET         000.000
+SHIFT          OFF
+VOX            OFF</pre>
+        </div>
+        <div class="card">
+          <div class="mini">Por que usar um código?</div>
+          <h3>Menos ruído, não invisibilidade.</h3>
+          <p>Se outros grupos usam a mesma frequência com códigos diferentes, o CTCSS/DCS pode impedir que o áudio deles abra o alto-falante. Isso ajuda a separar conversas.</p>
+          <p style="margin-top:12px">O mesmo recurso não impede que outro rádio monitore a frequência nem protege o conteúdo da conversa.</p>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <strong>Não crie uma “frequência secreta” fora da faixa autorizada.</strong> Uma frequência só deve ser usada quando for permitida. O objetivo de um canal de squad é organizar a comunicação e reduzir interferência, não burlar regras de rádio.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="privacidade">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">07 / interferência</div>
+        <div>
+          <h2>“Canal privado” tem um significado limitado.</h2>
+          <p class="section-intro">Em UV-5R e BF-777S analógicos, CTCSS/DCS são recursos de filtragem. Eles não fornecem confidencialidade.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="mini">Ajuda</div>
+          <h3>Menos abertura de áudio</h3>
+          <p>O rádio pode ignorar transmissões que não tenham o CTCSS/DCS esperado.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Ajuda</div>
+          <h3>Menos configuração acidental</h3>
+          <p>Um jogador que apenas seleciona a mesma frequência, mas não conhece o código, pode não ouvir o áudio no modo de squelch codificado.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Não ajuda</div>
+          <h3>Contra monitoramento</h3>
+          <p>Um terceiro pode descobrir a frequência e identificar o código. A transmissão analógica não fica criptografada.</p>
+        </article>
+      </div>
+
+      <div class="callout">
+        <strong>Boa prática para jogos:</strong> combine previamente um canal principal e um reserva, mantenha a configuração dentro das regras do evento e evite divulgar a tabela de canais além do necessário.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="procedimento">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">08 / procedimento</div>
+        <div>
+          <h2>Teste antes de entrar em campo.</h2>
+          <p class="section-intro">Uma configuração correta no papel ainda precisa ser validada com os aparelhos reais.</p>
+        </div>
+      </div>
+
+      <div class="process">
+        <article><div class="number">01</div><h3>ENERGIA</h3><p>Bateria carregada, antena instalada e volume audível.</p></article>
+        <article><div class="number">02</div><h3>FREQUÊNCIA</h3><p>Compare os números dos dois rádios.</p></article>
+        <article><div class="number">03</div><h3>CÓDIGO</h3><p>Confira CTCSS/DCS de TX e RX.</p></article>
+        <article><div class="number">04</div><h3>PTT</h3><p>Faça uma chamada curta e solte o botão para ouvir.</p></article>
+        <article><div class="number">05</div><h3>RESERVA</h3><p>Teste o canal alternativo antes do jogo.</p></article>
+      </div>
+
+      <div class="callout warn">
+        <strong>Alcance não é um número fixo.</strong> Distância, prédios, mata, relevo, altura da antena, orientação do rádio, potência e interferência mudam o resultado. Números de “X km” de anúncios ou vídeos não devem ser tratados como garantia.
+      </div>
+    </div>
+  </section>
+  <section class="section" id="freq-sem-codigo">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">09 / sem código</div>
+        <div>
+          <h2>Todos ouvem todos: a configuração básica.</h2>
+          <p class="section-intro">Se todos os UV-5R estiverem na mesma frequência com CTCSS/DCS desligados, conseguem se comunicar normalmente — desde que estejam no mesmo modo e em operação simplex.</p>
+        </div>
+      </div>
+
+      <div class="code-card" style="margin-bottom:20px">
+        <header>EXEMPLO · CANAL ABERTO (SEM CÓDIGO)</header>
+        <pre>FREQUÊNCIA     444.250
+MODO           FM / WIDE
+OFFSET         000.000
+SHIFT          OFF
+
+R-CTCSS        OFF
+T-CTCSS        OFF
+R-DCS          OFF
+T-DCS          OFF</pre>
+      </div>
+
+      <p style="font-size:13px;margin:0 0 20px">Quando configurado assim, todos os UV-5R na frequência conseguem ouvir e falar. Não há filtro de código.</p>
+
+      <div class="two" style="margin-top:16px">
+        <article class="card">
+          <div class="mini">Vantagem</div>
+          <h3>Simplicidade</h3>
+          <p>Não exige sincronização de um código adicional. Qualquer pessoa com UV-5R sintonizado naquela frequência participa.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Limitação</div>
+          <h3>Sem filtragem</h3>
+          <p>Se outro grupo usar a mesma frequência, ambos irão interferir. Não há separação.</p>
+        </article>
+      </div>
+
+      <div class="callout warn">
+        <strong>Importante:</strong> configurar a frequência corretamente não significa que ela seja sua "frequência privada". Qualquer rádio sintonizado nela pode ouvir. Se a frequência estiver autorizada para o evento e não ocupada naquele momento, funciona bem para um squad interno.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="escolher-codigo">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">10 / qual código</div>
+        <div>
+          <h2>CTCSS ou DCS: qual usar?</h2>
+          <p class="section-intro">Para um squad que utiliza somente UV-5R, DCS é a escolha mais prática. Os dois fazem essencialmente a mesma coisa, mas com técnicas diferentes.</p>
+        </div>
+      </div>
+
+      <div class="two">
+        <article class="card">
+          <div class="mini">Ton analógico</div>
+          <h3>CTCSS</h3>
+          <p>Usa um tom de áudio muito baixo contínuo, por exemplo <code>69.3 Hz</code>. O transmissor envia esse tom junto com a comunicação.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Código digital</div>
+          <h3>DCS</h3>
+          <p>Usa um código digital, por exemplo <code>D331N</code>. A letra <strong>N</strong> indica o modo normal do código.</p>
+        </article>
+      </div>
+
+      <h3 style="font-size:28px;margin:32px 0 18px">Para o squad</h3>
+
+      <div class="code-card">
+        <header>RECOMENDADO · SQUAD COM DCS</header>
+        <pre>FREQUÊNCIA     444.250
+DCS TX         D331N
+DCS RX         D331N
+CTCSS TX       OFF
+CTCSS RX       OFF
+OFFSET         000.000
+SHIFT          OFF</pre>
+      </div>
+
+      <p style="font-size:13px;margin:18px 0;color:var(--ink-soft)"><strong>Todos os UV-5R precisam ter exatamente a mesma configuração.</strong> O código funciona como um filtro de squelch adicional.</p>
+
+      <div class="callout">
+        <strong>Por que DCS para o squad?</strong> É mais prático porque o código já está integrado nas memórias do UV-5R. Ambos (CTCSS e DCS) fazem a mesma coisa no final: permitem que o rádio receptor decida se deve abrir o áudio. Para operação em equipe com múltiplos UV-5R, DCS oferece uma configuração mais direta.
+      </div>
+
+      <h3 style="font-size:28px;margin:32px 0 18px">O filtro de código</h3>
+
+      <p style="margin-bottom:16px">Um rádio em <code>444.250 + D331N</code> conversa normalmente com outro em <code>444.250 + D331N</code>. Mas um rádio em <code>444.250 + D023N</code> pode ficar silencioso, porque o código recebido não corresponde.</p>
+
+      <div class="cards">
+        <article class="card">
+          <div class="mini">Resultado</div>
+          <h3>Separação operacional</h3>
+          <p>Se outro grupo usar a mesma frequência com um código diferente, o áudio de um não abre o alto-falante do outro.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Resultado</div>
+          <h3>Menos interferência</h3>
+          <p>Reduz ruído de outras transmissões na mesma frequência, melhorando a clareza.</p>
+        </article>
+        <article class="card">
+          <div class="mini">Resultado</div>
+          <h3>Fácil sincronização</h3>
+          <p>Todos recebem e transmitem o código automaticamente; não exige coordenação extra.</p>
+        </article>
+      </div>
+
+      <div class="callout warn">
+        <strong>Isso não é criptografia ou sigilo.</strong> CTCSS/DCS não escondem a conversa. Um terceiro pode monitorar a frequência, descobrir o código e participar. O rádio do UV-5R não oferece recursos de criptografia; o código serve apenas para controlar qual transmissão o squelch deixa passar. Pense nele como um filtro, não como uma senha.
+      </div>
+
+      <h3 style="font-size:28px;margin:32px 0 18px">Resumo da escolha</h3>
+
+      <div class="process">
+        <article><div class="number">✓</div><h3>Frequência autorizada</h3><p>Escolha uma frequência permitida para o uso pretendido e não ocupada naquele momento.</p></article>
+        <article><div class="number">✓</div><h3>DCS no squad</h3><p>Configure o mesmo código DCS em TX e RX para todos os UV-5R.</p></article>
+        <article><div class="number">✓</div><h3>Simplex e offset OFF</h3><p>Em operação ponto-a-ponto, RX e TX usam a mesma frequência e offset fica desligado.</p></article>
+        <article><div class="number">✓</div><h3>Memorize o canal</h3><p>Salve a configuração para evitar redigitação e garantir consistência.</p></article>
+        <article><div class="number">✓</div><h3>Teste antes do jogo</h3><p>Transmissão e recepção em todos os rádios antes de entrar em campo.</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="glossario">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">11 / glossário</div>
+        <div>
+          <h2>Vocabulário essencial.</h2>
+          <p class="section-intro">Os termos que aparecem com mais frequência no UV-5R e na programação do BF-777S.</p>
+        </div>
+      </div>
+
+      <div class="table-shell">
+        <table id="glossary">
+          <thead><tr><th>Termo</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">MHz</td><td>Unidade usada para representar a frequência.</td></tr>
+            <tr><td class="mono">RX</td><td>Recepção — o rádio está recebendo.</td></tr>
+            <tr><td class="mono">TX</td><td>Transmissão — o rádio está enviando.</td></tr>
+            <tr><td class="mono">PTT</td><td>Push To Talk — botão usado para transmitir.</td></tr>
+            <tr><td class="mono">CTCSS</td><td>Subtom analógico usado para controle do squelch.</td></tr>
+            <tr><td class="mono">DCS</td><td>Código de squelch. Não é criptografia.</td></tr>
+            <tr><td class="mono">SQL</td><td>Squelch — nível de sinal necessário para abrir o áudio.</td></tr>
+            <tr><td class="mono">TDR</td><td>Dual Watch — monitoramento de duas canaletas no UV-5R.</td></tr>
+            <tr><td class="mono">VOX</td><td>Transmissão acionada pela voz. Para comunicação de equipe, normalmente é mais previsível manter desligado.</td></tr>
+            <tr><td class="mono">OFFSET</td><td>Diferença entre RX e TX, usada principalmente em repetidoras.</td></tr>
+            <tr><td class="mono">SFT-D</td><td>Shift de frequência. Em simplex, normalmente permanece desligado.</td></tr>
+            <tr><td class="mono">TOT</td><td>Time Out Timer — limita o tempo contínuo de transmissão.</td></tr>
+            <tr><td class="mono">WIDE</td><td>Modo de largura de banda. Deve ser compatível com o sistema usado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout" style="margin-top:24px">
+        <strong>Referência de segurança operacional:</strong> sempre respeite as frequências autorizadas, as regras do evento e a regulamentação aplicável. Capacidade técnica de transmitir não equivale a autorização para transmitir.
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="eyebrow" style="color:var(--orange)">FIELD COMMS / RF-01</div>
+      <h2>Comunicação clara começa com configuração clara.</h2>
+    </div>
+    <div>
+      <p>Manual introdutório para Baofeng UV-5R e BF-777S em comunicação FM analógica. Projetado como referência de campo, não como substituto das regras do evento ou da regulamentação local.</p>
+      <div class="footer-note">UV-5R + BF-777S · UHF · SIMPLEX · CTCSS / DCS · DOCUMENTAÇÃO TÉCNICA</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const input = document.querySelector('#glossary');
+  // Pequena interação intencional: destacar a linha do glossário ao tocar/clicar.
+  input?.querySelectorAll('tbody tr').forEach(row => {
+    row.tabIndex = 0;
+    const activate = () => {
+      input.querySelectorAll('tbody tr').forEach(r => r.classList.remove('active'));
+      row.classList.add('active');
+    };
+    row.addEventListener('click', activate);
+    row.addEventListener('focus', activate);
+  });
+})();
+</script>
 </body>
 </html>
