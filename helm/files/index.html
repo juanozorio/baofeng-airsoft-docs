@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
@@ -334,6 +334,20 @@ tr.highlight td{background:rgba(215,101,50,.10)}
 }
 .hide{display:none!important}
 
+/* UTILITY CLASSES */
+.rail-meta-text{color:#92a19c;margin-top:12px}
+.hero-wrap{display:contents}
+.two-mt{margin-top:16px}
+.p-mt{margin-top:12px}
+.p-small{font-size:13px;margin:0 0 20px}
+.p-config{font-size:13px;margin:18px 0;color:var(--ink-soft)}
+.p-mb{margin-bottom:16px}
+.code-card-mb{margin-bottom:20px}
+.h3-section{font-size:28px;margin:32px 0 18px}
+.compat-title{font-size:31px;margin-top:36px}
+.callout-mt{margin-top:24px}
+.eyebrow-orange{color:var(--orange)}
+
 /* FOOTER */
 footer{
   padding:55px 0 70px;background:var(--navy);color:#dbe2df;
@@ -586,13 +600,13 @@ footer p{color:#aebdb8;max-width:650px}
 
   <div class="rail-meta">
     <div class="status"><i></i> DOCUMENTAÇÃO OPERACIONAL</div>
-    <p class="small" style="color:#92a19c;margin-top:12px">UV-5R + BF-777S<br>FM analógico · UHF</p>
+    <p class="small rail-meta-text">UV-5R + BF-777S<br>FM analógico · UHF</p>
   </div>
 </aside>
 
 <main>
   <header class="hero">
-    <div class="wrap" style="display:contents">
+    <div class="wrap hero-wrap">
       <div>
         <div class="wrap">
           <div class="eyebrow">Manual técnico para airsoft</div>
@@ -607,7 +621,7 @@ footer p{color:#aebdb8;max-width:650px}
         </div>
       </div>
 
-      <div class="radio-plate" aria-label="Exemplo visual de um canal">
+      <div class="radio-plate">
         <div class="plate-top"><span>FIELD CHANNEL</span><span>RF / 01</span></div>
         <div class="signal">
           <small>EXEMPLO DE CONFIGURAÇÃO</small>
@@ -650,7 +664,7 @@ footer p{color:#aebdb8;max-width:650px}
         </article>
       </div>
 
-      <div class="two" style="margin-top:16px">
+      <div class="two two-mt">
         <article class="card">
           <div class="mini">Modelo de operação</div>
           <h3>Simplex</h3>
@@ -807,7 +821,7 @@ SHIFT          OFF</pre>
         </article>
       </div>
 
-      <h3 style="font-size:31px;margin-top:36px">Quando existe CTCSS ou DCS</h3>
+      <h3 class="compat-title">Quando existe CTCSS ou DCS</h3>
       <div class="compat">
         <article class="device">
           <small>BF-777S</small>
@@ -848,7 +862,7 @@ SHIFT          OFF</pre>
         <article><div class="number">TESTE</div><h3>05</h3><p>Teste transmissão e recepção de todos os rádios antes do jogo.</p></article>
       </div>
 
-      <div class="two" style="margin-top:18px">
+      <div class="two two-mt">
         <div class="code-card">
           <header>MODELO DE CANAL · SQUAD</header>
           <pre>NOME           SQUAD
@@ -865,7 +879,7 @@ VOX            OFF</pre>
           <div class="mini">Por que usar um código?</div>
           <h3>Menos ruído, não invisibilidade.</h3>
           <p>Se outros grupos usam a mesma frequência com códigos diferentes, o CTCSS/DCS pode impedir que o áudio deles abra o alto-falante. Isso ajuda a separar conversas.</p>
-          <p style="margin-top:12px">O mesmo recurso não impede que outro rádio monitore a frequência nem protege o conteúdo da conversa.</p>
+          <p class="p-mt">O mesmo recurso não impede que outro rádio monitore a frequência nem protege o conteúdo da conversa.</p>
         </div>
       </div>
 
@@ -942,7 +956,7 @@ VOX            OFF</pre>
         </div>
       </div>
 
-      <div class="code-card" style="margin-bottom:20px">
+      <div class="code-card code-card-mb">
         <header>EXEMPLO · CANAL ABERTO (SEM CÓDIGO)</header>
         <pre>FREQUÊNCIA     444.250
 MODO           FM / WIDE
@@ -955,9 +969,9 @@ R-DCS          OFF
 T-DCS          OFF</pre>
       </div>
 
-      <p style="font-size:13px;margin:0 0 20px">Quando configurado assim, todos os UV-5R na frequência conseguem ouvir e falar. Não há filtro de código.</p>
+      <p class="p-small">Quando configurado assim, todos os UV-5R na frequência conseguem ouvir e falar. Não há filtro de código.</p>
 
-      <div class="two" style="margin-top:16px">
+      <div class="two two-mt">
         <article class="card">
           <div class="mini">Vantagem</div>
           <h3>Simplicidade</h3>
@@ -999,7 +1013,7 @@ T-DCS          OFF</pre>
         </article>
       </div>
 
-      <h3 style="font-size:28px;margin:32px 0 18px">Para o squad</h3>
+      <h3 class="h3-section">Para o squad</h3>
 
       <div class="code-card">
         <header>RECOMENDADO · SQUAD COM DCS</header>
@@ -1012,15 +1026,15 @@ OFFSET         000.000
 SHIFT          OFF</pre>
       </div>
 
-      <p style="font-size:13px;margin:18px 0;color:var(--ink-soft)"><strong>Todos os UV-5R precisam ter exatamente a mesma configuração.</strong> O código funciona como um filtro de squelch adicional.</p>
+      <p class="p-config"><strong>Todos os UV-5R precisam ter exatamente a mesma configuração.</strong> O código funciona como um filtro de squelch adicional.</p>
 
       <div class="callout">
         <strong>Por que DCS para o squad?</strong> É mais prático porque o código já está integrado nas memórias do UV-5R. Ambos (CTCSS e DCS) fazem a mesma coisa no final: permitem que o rádio receptor decida se deve abrir o áudio. Para operação em equipe com múltiplos UV-5R, DCS oferece uma configuração mais direta.
       </div>
 
-      <h3 style="font-size:28px;margin:32px 0 18px">O filtro de código</h3>
+      <h3 class="h3-section">O filtro de código</h3>
 
-      <p style="margin-bottom:16px">Um rádio em <code>444.250 + D331N</code> conversa normalmente com outro em <code>444.250 + D331N</code>. Mas um rádio em <code>444.250 + D023N</code> pode ficar silencioso, porque o código recebido não corresponde.</p>
+      <p class="p-mb">Um rádio em <code>444.250 + D331N</code> conversa normalmente com outro em <code>444.250 + D331N</code>. Mas um rádio em <code>444.250 + D023N</code> pode ficar silencioso, porque o código recebido não corresponde.</p>
 
       <div class="cards">
         <article class="card">
@@ -1044,7 +1058,7 @@ SHIFT          OFF</pre>
         <strong>Isso não é criptografia ou sigilo.</strong> CTCSS/DCS não escondem a conversa. Um terceiro pode monitorar a frequência, descobrir o código e participar. O rádio do UV-5R não oferece recursos de criptografia; o código serve apenas para controlar qual transmissão o squelch deixa passar. Pense nele como um filtro, não como uma senha.
       </div>
 
-      <h3 style="font-size:28px;margin:32px 0 18px">Resumo da escolha</h3>
+      <h3 class="h3-section">Resumo da escolha</h3>
 
       <div class="process">
         <article><div class="number">✓</div><h3>Frequência autorizada</h3><p>Escolha uma frequência permitida para o uso pretendido e não ocupada naquele momento.</p></article>
@@ -1086,7 +1100,7 @@ SHIFT          OFF</pre>
         </table>
       </div>
 
-      <div class="callout" style="margin-top:24px">
+      <div class="callout callout-mt">
         <strong>Referência de segurança operacional:</strong> sempre respeite as frequências autorizadas, as regras do evento e a regulamentação aplicável. Capacidade técnica de transmitir não equivale a autorização para transmitir.
       </div>
     </div>
@@ -1097,7 +1111,7 @@ SHIFT          OFF</pre>
 <footer>
   <div class="wrap footer-grid">
     <div>
-      <div class="eyebrow" style="color:var(--orange)">FIELD COMMS / RF-01</div>
+      <div class="eyebrow eyebrow-orange">FIELD COMMS / RF-01</div>
       <h2>Comunicação clara começa com configuração clara.</h2>
     </div>
     <div>
